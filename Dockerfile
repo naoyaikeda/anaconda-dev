@@ -4,11 +4,12 @@ ENV USER worker
 ENV HOME /home/${USER}
 ENV SHELL /bin/bash
 
-RUN apk add sudo
-
-RUN adduser -S ${USER} \
-    && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
-    && echo "${USER}:worker_pass" | chpasswd
+RUN apk add sudo && \
+    apk add shadow && \
+    useradd -m ${USER} && \
+    gpasswd -a ${USER} wheel && \
+    sed -e 's;^# \(%wheel.*NOPASSWD.*\);\1;g' -i /etc/sudoers && \
+    echo "${USER}:worker_pass" | chpasswd
 USER ${USER}
 WORKDIR ${HOME}
 
