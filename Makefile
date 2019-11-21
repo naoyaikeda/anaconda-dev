@@ -18,7 +18,7 @@ ifneq ("$(wildcard $(WSLPROCPATH))","")
 		$(USER)/$(NAME):$(VERSION)
 else
 	docker run -it --rm \
-		-v $$PWD/works:/works \
+		-v $$PWD/worker:/home/worker\
 		-p 10000:8080 \
 		--name $(NAME) \
 		$(USER)/$(NAME):$(VERSION)
